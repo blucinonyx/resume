@@ -52,8 +52,8 @@ pnpm-lock.yaml
 /dist-ssr/
 *.local
 
-# ─── Generated CV PDFs (rebuilt via npm run build:cv) ────────────────
-/public/cv-shmakov-*.pdf
+# ─── Generated CV PDFs (committed as static assets; regenerate locally via npm run build:cv) ────────────────
+# /public/cv-shmakov-*.pdf  ← intentionally tracked so the Download CV button works on GH Pages
 
 # ─── Vite / Vitest cache ─────────────────────────────────────────────
 .vite/
