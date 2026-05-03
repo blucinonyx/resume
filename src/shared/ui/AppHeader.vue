@@ -47,7 +47,23 @@ function downloadCV(): void {
       </button>
 
       <button type="button" class="hdr__download" @click="downloadCV">
-        ⤓ download CV
+        <svg
+          class="hdr__download-icon"
+          viewBox="0 0 24 24"
+          width="14"
+          height="14"
+          aria-hidden="true"
+        >
+          <path
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"
+          />
+        </svg>
+        download CV
       </button>
     </div>
   </header>
@@ -62,7 +78,7 @@ function downloadCV(): void {
   align-items: center;
   justify-content: space-between;
   gap: $space-4;
-  padding: $space-3 $space-5;
+  padding: $space-4 $space-5;
   background: color-mix(in srgb, var(--color-bg) 85%, transparent);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
@@ -76,22 +92,29 @@ function downloadCV(): void {
 .hdr__brand {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
   text-decoration: none;
   color: var(--color-text);
+  border-radius: $radius-sm;
+  outline: none;
 
   &:hover { color: var(--color-text); }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+  }
 }
 
 .hdr__name {
   font-weight: $fw-bold;
-  font-size: $fs-base;
+  font-size: $fs-md;
   letter-spacing: -0.01em;
 }
 
 .hdr__role {
   font-family: $font-mono;
-  font-size: $fs-xs;
+  font-size: $fs-sm;
   color: var(--color-muted);
 }
 
@@ -111,13 +134,15 @@ function downloadCV(): void {
 }
 
 .hdr__lang-btn {
-  padding: $space-2 $space-3;
+  padding: $space-2 $space-4;
   background: transparent;
   border: 0;
   font-family: $font-mono;
-  font-size: $fs-xs;
+  font-size: $fs-sm;
+  font-weight: $fw-semibold;
   color: var(--color-muted);
   transition: all $transition-fast;
+  cursor: pointer;
 
   &--on {
     background: var(--color-accent);
@@ -133,14 +158,15 @@ function downloadCV(): void {
   display: inline-flex;
   align-items: center;
   gap: $space-2;
-  padding: $space-2 $space-3;
+  padding: $space-2 $space-4;
   background: var(--color-panel);
   border: 1px solid var(--color-border);
   border-radius: $radius-md;
   font-family: $font-mono;
-  font-size: $fs-xs;
+  font-size: $fs-sm;
   color: var(--color-text);
   transition: all $transition-fast;
+  cursor: pointer;
 
   &:hover {
     border-color: var(--color-accent);
@@ -149,27 +175,36 @@ function downloadCV(): void {
 }
 
 .hdr__theme-dot {
-  width: 10px;
-  height: 10px;
+  width: 12px;
+  height: 12px;
   border-radius: $radius-full;
   background: var(--color-accent);
   box-shadow: var(--glow-accent);
+  flex-shrink: 0;
 }
 
 .hdr__download {
-  padding: $space-2 $space-4;
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-3 $space-4;
   background: var(--color-accent);
   color: var(--color-bg);
   border: 1px solid var(--color-accent);
   border-radius: $radius-md;
   font-family: $font-mono;
-  font-size: $fs-xs;
+  font-size: $fs-sm;
   font-weight: $fw-semibold;
   transition: all $transition-fast;
+  cursor: pointer;
 
   &:hover {
     background: var(--color-accent-hover);
     border-color: var(--color-accent-hover);
   }
+}
+
+.hdr__download-icon {
+  flex-shrink: 0;
 }
 </style>

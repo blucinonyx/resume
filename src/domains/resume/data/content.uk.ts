@@ -57,12 +57,8 @@ export const CONTENT_UK: PeriodContentMap = Object.freeze({
     context: 'Кредитний / wallet fintech (споживчі кредити).',
     bullets: [
       'Прийшов будувати новий продукт на Laravel + Vue.js + MySQL + Webpack.',
-      'Контракт завершився через три місяці, коли воєнні умови ринку зупинили кредитний бізнес; команда скоротилася разом із проектом.',
     ],
-    metrics: [
-      { key: 'тривалість', value: '4 місяці' },
-      { key: 'причина уходу', value: 'воєнна пауза бізнесу' },
-    ],
+    metrics: [{ key: 'тривалість', value: '4 місяці' }],
     stack: ['Laravel', 'Vue.js', 'MySQL', 'Webpack', 'PHP 8'],
     quote: null,
   },
@@ -214,9 +210,7 @@ export const CONTENT_UK: PeriodContentMap = Object.freeze({
     location: 'Онлайн',
     url: 'https://goit.global',
     context: 'Онлайн-bootcamp по HTML, CSS та JavaScript-модулях.',
-    bullets: [
-      'Пройшов JS, HTML і CSS модулі; не йшов далі у Node.js / React треки бо їх не використовували на роботі.',
-    ],
+    bullets: [],
     metrics: [{ key: 'період', value: '2018 – 2019' }],
     stack: ['JavaScript', 'HTML', 'CSS'],
     quote: null,
@@ -252,12 +246,12 @@ export const CONTENT_UK: PeriodContentMap = Object.freeze({
     location: 'Миколаїв',
     url: 'https://itstep.org',
     context:
-      'П’ятирічна вечірня програма — перша освіта з програмування. Pascal, C++, основи SQL.',
+      'П’ятирічна вечірня програма — перша освіта з програмування. Курс включав JavaScript, C++, C#, CI, PHP, HTML і SQL.',
     bullets: [
       'Дипломний проект: калькулятор площі нерухомості на VB6 — через вісім років він став демо-проектом, який приніс мою першу комерційну роботу.',
     ],
     metrics: [{ key: 'тривалість', value: '5 років (part-time)' }],
-    stack: ['Pascal', 'C++', 'SQL', 'VB6', 'HTML/CSS', 'Algorithms'],
+    stack: ['JavaScript', 'C++', 'C#', 'CI', 'PHP', 'HTML', 'SQL', 'VB6'],
     quote:
       'Калькулятор написаний на ШАГ став live-демо що принесло першу роботу — звідси звичка робити інтерактивні штуки на кшталт цього сайту.',
   },

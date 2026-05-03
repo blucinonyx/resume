@@ -57,12 +57,8 @@ export const CONTENT_EN: PeriodContentMap = Object.freeze({
     context: 'Lending / wallet fintech (consumer credit).',
     bullets: [
       'Joined to build the new product on Laravel + Vue.js + MySQL + Webpack.',
-      'Engagement ended after three months when wartime market conditions paused the lending business; the team scaled down with the project.',
     ],
-    metrics: [
-      { key: 'tenure', value: '4 months' },
-      { key: 'reason for leaving', value: 'wartime business pause' },
-    ],
+    metrics: [{ key: 'tenure', value: '4 months' }],
     stack: ['Laravel', 'Vue.js', 'MySQL', 'Webpack', 'PHP 8'],
     quote: null,
   },
@@ -214,9 +210,7 @@ export const CONTENT_EN: PeriodContentMap = Object.freeze({
     location: 'Online',
     url: 'https://goit.global',
     context: 'Online bootcamp covering HTML, CSS and JavaScript modules.',
-    bullets: [
-      'Completed JS, HTML and CSS modules; did not continue into the Node.js / React tracks since they were not used at work.',
-    ],
+    bullets: [],
     metrics: [{ key: 'period', value: '2018 – 2019' }],
     stack: ['JavaScript', 'HTML', 'CSS'],
     quote: null,
@@ -252,12 +246,12 @@ export const CONTENT_EN: PeriodContentMap = Object.freeze({
     location: 'Mykolaiv',
     url: 'https://itstep.org',
     context:
-      'Five-year part-time programme — first programming education. Pascal, C++, SQL fundamentals.',
+      'Five-year part-time programme — first programming education. Curriculum covered JavaScript, C++, C#, CI, PHP, HTML and SQL.',
     bullets: [
       'Final-year project: a property-area calculator on VB6 — eight years later it became the demo that landed me my first commercial job.',
     ],
     metrics: [{ key: 'duration', value: '5 years (part-time)' }],
-    stack: ['Pascal', 'C++', 'SQL', 'VB6', 'HTML/CSS', 'Algorithms'],
+    stack: ['JavaScript', 'C++', 'C#', 'CI', 'PHP', 'HTML', 'SQL', 'VB6'],
     quote:
       'The calculator I shipped at STEP later became the live demo that got me hired — that’s why I keep building click-it interactives like this site.',
   },

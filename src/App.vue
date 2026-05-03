@@ -1,5 +1,17 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
 import AppHeader from '@/shared/ui/AppHeader.vue';
+
+const router = useRouter();
+
+router.afterEach(() => {
+  // After every navigation, return focus to the top of the page so keyboard
+  // users don't have to Tab back from the previous interactive element.
+  requestAnimationFrame(() => {
+    const brand = document.querySelector<HTMLElement>('.hdr__brand');
+    brand?.focus();
+  });
+});
 </script>
 
 <template>
