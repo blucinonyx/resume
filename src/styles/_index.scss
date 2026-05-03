@@ -1,0 +1,7 @@
+// Single entry-point for SCSS variables.
+// vite.config.ts injects this via additionalData so all components can use $space-*, $font-*, etc.
+//
+// Theme palettes (color CSS custom properties) are loaded once globally via global.scss,
+// not here — to avoid duplication when each component imports this file.
+
+@forward './variables';

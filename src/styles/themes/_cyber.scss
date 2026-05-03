@@ -1,0 +1,46 @@
+// Cyber theme — neon green-on-black hacker terminal vibe (easter egg / power-user).
+
+[data-theme='cyber'] {
+  // Surfaces
+  --color-bg: #000000;
+  --color-bg-grad: radial-gradient(ellipse at top, #001a0e 0%, #000000 70%);
+  --color-panel: #0a0e0a;
+  --color-panel-2: #0f140f;
+  --color-border: #1a3a1a;
+  --color-border-strong: #2d5a2d;
+
+  // Text
+  --color-text: #00ff88;
+  --color-text-strong: #ccff99;
+  --color-muted: #4a8a4a;
+
+  // Brand / semantic
+  --color-accent: #00ffaa;
+  --color-accent-hover: #66ffcc;
+  --color-success: #00ff44;
+  --color-warning: #ffaa00;
+  --color-danger: #ff3344;
+  --color-magenta: #ff44dd;
+  --color-rose: #ff66bb;
+
+  // Type-specific
+  --color-type-work: var(--color-accent);
+  --color-type-edu: var(--color-magenta);
+  --color-type-mil: var(--color-warning);
+
+  // Heavy glow
+  --glow-accent: 0 0 20px rgba(0, 255, 170, 0.6);
+  --glow-success: 0 0 12px rgba(0, 255, 68, 0.7);
+  --glow-magenta: 0 0 20px rgba(255, 68, 221, 0.6);
+  --glow-warning: 0 0 20px rgba(255, 170, 0, 0.6);
+
+  // Shadows
+  --shadow-card: 0 0 8px rgba(0, 255, 170, 0.15);
+  --shadow-panel: 0 0 16px rgba(0, 255, 170, 0.2);
+  --shadow-deep: 0 0 32px rgba(0, 255, 170, 0.25);
+
+  color-scheme: dark;
+
+  // Terminal-feel: monospace everything in cyber theme
+  --font-body-override: 'JetBrains Mono', monospace;
+}

@@ -1,0 +1,43 @@
+// Light theme — clean, professional, "for HR / recruiter who doesn't like dark UIs".
+
+[data-theme='light'] {
+  // Surfaces
+  --color-bg: #fafbfc;
+  --color-bg-grad: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+  --color-panel: #ffffff;
+  --color-panel-2: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+
+  // Text
+  --color-text: #0f172a;
+  --color-text-strong: #020617;
+  --color-muted: #64748b;
+
+  // Brand / semantic
+  --color-accent: #0284c7;
+  --color-accent-hover: #0369a1;
+  --color-success: #059669;
+  --color-warning: #d97706;
+  --color-danger: #dc2626;
+  --color-magenta: #9333ea;
+  --color-rose: #db2777;
+
+  // Type-specific
+  --color-type-work: var(--color-accent);
+  --color-type-edu: var(--color-magenta);
+  --color-type-mil: var(--color-warning);
+
+  // Glow (subtler in light mode)
+  --glow-accent: 0 0 0 3px rgba(2, 132, 199, 0.15);
+  --glow-success: 0 0 0 3px rgba(5, 150, 105, 0.15);
+  --glow-magenta: 0 0 0 3px rgba(147, 51, 234, 0.15);
+  --glow-warning: 0 0 0 3px rgba(217, 119, 6, 0.15);
+
+  // Shadows
+  --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-panel: 0 4px 12px rgba(15, 23, 42, 0.1);
+  --shadow-deep: 0 12px 24px rgba(15, 23, 42, 0.12);
+
+  color-scheme: light;
+}
