@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
+    "build:local": "vue-tsc --noEmit && vite build --base=/",
     "preview": "vite preview",
     "test": "vitest",
     "build:cv": "node scripts/build-cv-pdfs.mjs",

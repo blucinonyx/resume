@@ -26,6 +26,10 @@ export const CONTENT_UK: PeriodContentMap = Object.freeze({
       { key: 'FE-домени', value: '32 (30+ мігровано)' },
       { key: 'клієнтів', value: '43К+' },
     ],
+    highlightMetrics: ['добовий трафік', 'команда зросла', 'подій/добу'] as const,
+    pinnedDescription:
+      'Масштабував ClickHouse <b>1М → 124М рядків/добу</b> на Laravel + RabbitMQ. ' +
+      'Зібрав інженерну команду <b>0 → 5</b>. App-store SaaS · <b>43K+ клієнтів</b>.',
     stack: [
       'Laravel 9',
       'Vue 3',

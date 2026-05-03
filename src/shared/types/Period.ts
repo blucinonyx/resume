@@ -50,6 +50,18 @@ export interface PeriodContent {
   metrics: { key: string; value: string }[];
   stack: string[];
   quote: string | null;
+  /**
+   * Short description (≤ 250 chars) shown in the pinned hero card.
+   * May contain `<b>` tags around numbers for emphasis — rendered via `v-html`
+   * (content is project-internal, no sanitization required).
+   * Falls back to `context` when absent.
+   */
+  pinnedDescription?: string;
+  /**
+   * Ordered list of `metric.key` values to surface in the pinned hero (top-3 slots).
+   * When absent, the hero falls back to `metrics.slice(0, 3)`.
+   */
+  highlightMetrics?: readonly string[];
 }
 
 export type PeriodContentMap = Readonly<Record<PeriodSlug, PeriodContent>>;

@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Все, що приходить, обслуговуємо з dist/
+    # Запобігає циклу: якщо вже /dist/... — не чіпати
+    RewriteCond %{REQUEST_URI} !^/dist/
+
+    # Якщо файл існує саме в dist/<path> — віддати його
+    RewriteCond %{DOCUMENT_ROOT}/dist%{REQUEST_URI} -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/dist%{REQUEST_URI} -d
+    RewriteRule ^(.*)$ /dist/$1 [L]
+
+    # SPA fallback (на випадок переходу в history-mode)
+    RewriteCond %{REQUEST_URI} !^/dist/
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^.*$ /dist/index.html [L]

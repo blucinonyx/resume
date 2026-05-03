@@ -24,6 +24,7 @@ index.legacy.html
 
 # ─── Claude Code (project plans, agent scratch) ───────────────────────
 /.claude/
+/.superpowers/
 
 # ─── Source materials kept private ────────────────────────────────────
 /resume.file/
