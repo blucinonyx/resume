@@ -43,6 +43,19 @@ function labelFor(slug: PeriodSlug): string {
   return ContentService.content(slug, i18n.current)?.title ?? slug;
 }
 
+// Convert vertical wheel input over the strip into horizontal scroll, so
+// users can scroll left/right with a regular mouse wheel and the page
+// behind the strip doesn't move when they're aiming at the tabs.
+function onWheel(e: WheelEvent): void {
+  const el = trackEl.value;
+  if (!el) return;
+  const dy = e.deltaY;
+  const dx = e.deltaX;
+  if (Math.abs(dy) <= Math.abs(dx)) return;
+  e.preventDefault();
+  el.scrollLeft += dy;
+}
+
 watch(
   () => props.activeSlug,
   async (slug) => {
@@ -77,7 +90,7 @@ watch(
       </svg>
     </button>
 
-    <div ref="trackEl" class="strip__track">
+    <div ref="trackEl" class="strip__track" @wheel="onWheel">
       <button
         v-for="p in periods"
         :key="p.slug"
@@ -132,10 +145,9 @@ watch(
   gap: $space-2;
   background: var(--color-panel);
   border: 1px solid var(--color-border);
-  // Bootstrap nav-tabs style: a 1px horizontal line at the bottom of the
-  // strip; the active tab's own bottom border (panel-coloured) "punches
-  // through" this line in its own width — no JS / no bridge element needed.
-  border-bottom: 1px solid var(--color-border);
+  // Bottom accent line — the active tab's panel-coloured bottom border
+  // overhangs and "punches through" it in this tab's width.
+  border-bottom: 2px solid var(--current-accent, var(--color-border));
   border-radius: $radius-lg $radius-lg 0 0;
   padding: $space-2 $space-2 0;
   position: relative;
@@ -147,6 +159,13 @@ watch(
   align-items: center;
   justify-content: center;
   width: 36px;
+  height: 36px;
+  // Centre vertically inside the grid row so the strip's grid row height
+  // is driven by the tab track. If the nav had `margin-bottom`, it would
+  // inflate the row and the tabs would not reach the strip's bottom accent
+  // line — leaving a visible gap that the active tab's panel-coloured
+  // bottom border can't bridge.
+  align-self: center;
   background: var(--color-panel-2);
   border: 1px solid var(--color-border);
   border-radius: $radius-md;
@@ -154,9 +173,6 @@ watch(
   cursor: pointer;
   transition: all $transition-fast;
   flex-shrink: 0;
-  // Symmetric vertical breathing room — same gap to the strip's bottom edge
-  // as to the top.
-  margin-bottom: $space-2;
 
   &:hover:not(:disabled) {
     border-color: var(--color-accent);
@@ -177,8 +193,6 @@ watch(
 .strip__track {
   display: flex;
   gap: 0;
-  // Allow horizontal scroll for overflow tabs while keeping the active tab's
-  // ::after bridge able to render BELOW the track (overflow-y: visible).
   overflow-x: auto;
   overflow-y: visible;
   scrollbar-width: none;
@@ -188,10 +202,9 @@ watch(
   &::-webkit-scrollbar { display: none; }
 }
 
-// Tab — classic Bootstrap nav-tabs. Inactive tabs are flat & transparent;
-// active tab gets a 1px grey wrap-around border (top/left/right) and its
-// bottom border is panel-coloured so it visually erases the strip's bottom
-// line in its own width — connecting the tab to the panel below.
+// Tab — Bootstrap nav-tabs pattern. Active tab uses border-color trick: the
+// bottom border is the SAME colour as the panel below, so it visually erases
+// the strip's bottom accent border in its own width.
 .strip__tab {
   position: relative;
   display: flex;
@@ -203,30 +216,53 @@ watch(
   max-width: 180px;
   padding: $space-2 $space-3;
   background: transparent;
-  // 1px transparent border on all sides — keeps layout stable across states
-  border: 1px solid transparent;
-  // Overlap the strip's 1px bottom border so the active tab can cover it
-  // via its own panel-coloured bottom border (Bootstrap trick).
-  margin-bottom: -1px;
+  // 2px transparent border on all sides — keeps layout stable across states
+  border: 2px solid transparent;
+  // Overlap the strip's 2px bottom accent border by 2px so the active tab
+  // can cover it via its own panel-coloured bottom border (Bootstrap trick).
+  margin-bottom: -2px;
   border-radius: $radius-md $radius-md 0 0;
   font-family: $font-mono;
   cursor: pointer;
   scroll-snap-align: center;
   transition: background 160ms ease, border-color 160ms ease;
 
+  // Vertical separator — only on inactive tabs that follow another inactive
+  & + & {
+    border-left: 1px solid var(--color-border);
+  }
+
   &:hover:not(.strip__tab--active) {
     border-color: color-mix(in srgb, var(--color-border) 70%, transparent);
     background: color-mix(in srgb, var(--color-panel-2) 60%, transparent);
   }
 
-  // Active — flat Bootstrap style: same grey border as everything else on
-  // top + left + right; bottom border = panel colour to seam with the
-  // content panel below. No lift, no shadow, no per-type accent on borders.
+  // Active — wrap-around in type accent on TOP + LEFT + RIGHT. The bottom
+  // border is panel-coloured AND 3px tall (1px wider than the strip's 2px
+  // accent line) with a matching margin-bottom: -3px, so the active tab's
+  // bottom edge physically sits below the strip's underline and erases it
+  // in this tab's width. Pops 3px up.
   &--active {
     z-index: 3;
+    margin-top: -3px;
+    margin-bottom: -3px;
+    padding-top: calc(#{$space-2} + 3px);
     background: var(--color-panel);
-    border-color: var(--color-border) var(--color-border) var(--color-panel);
+    border-color: var(--strip-tab-accent, var(--color-accent));
+    border-bottom: 3px solid var(--color-panel);
+    box-shadow: 0 -3px 14px color-mix(in srgb, var(--strip-tab-accent, var(--color-accent)) 18%, transparent);
   }
+
+  // Override the inactive-tab grey separator when the next tab is active —
+  // the active tab's left border must be the accent colour, not grey.
+  & + &--active {
+    border-left: 2px solid var(--strip-tab-accent, var(--color-accent));
+  }
+
+  // Per-type accent on active tab
+  &--active.strip__tab--work { --strip-tab-accent: var(--color-type-work); }
+  &--active.strip__tab--edu  { --strip-tab-accent: var(--color-type-edu); }
+  &--active.strip__tab--mil  { --strip-tab-accent: var(--color-type-mil); }
 }
 
 .strip__pin {
