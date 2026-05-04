@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import { resolve } from 'node:path';
 
 export default defineConfig({
-  base: '/resume.my/',
+  base: '/resume/',
   plugins: [vue()],
   resolve: {
     alias: {
