@@ -9,7 +9,7 @@ const i18nStore = useI18nStore();
 
 function downloadCV(): void {
   const lang = i18nStore.current;
-  const file = lang === Lang.UK ? 'cv-shmakov-uk.pdf' : 'cv-shmakov-en.pdf';
+  const file = lang === Lang.UK ? 'cv-shmakov-ua.pdf' : 'cv-shmakov-en.pdf';
   const url = `${import.meta.env.BASE_URL}${file}`;
   window.open(url, '_blank', 'noopener');
 }
@@ -19,8 +19,43 @@ function downloadCV(): void {
   <header class="hdr">
     <RouterLink to="/" class="hdr__brand">
       <span class="hdr__name">Olexander Shmakov</span>
-      <span class="hdr__role">Senior Full-Stack · Tech Lead</span>
+      <span class="hdr__role">Senior Full-Stack · Laravel + Vue · 10+ years · Tech Lead</span>
     </RouterLink>
+
+    <nav class="hdr__contacts" aria-label="Contact">
+      <a
+        class="hdr__contact"
+        href="https://linkedin.com/in/shmakov-laravel"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="LinkedIn — preferred contact"
+      >
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.03-1.85-3.03-1.85 0-2.13 1.45-2.13 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.78A1.77 1.77 0 0 0 0 1.75v20.5C0 23.21.79 24 1.78 24h20.44c.99 0 1.78-.79 1.78-1.75V1.75A1.78 1.78 0 0 0 22.22 0z"
+          />
+        </svg>
+        LinkedIn
+      </a>
+      <a
+        class="hdr__contact"
+        href="mailto:blucinonyx@gmail.com"
+        title="Send email"
+      >
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+          <path
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3 6h18v12H3z M3 6l9 7 9-7"
+          />
+        </svg>
+        blucinonyx@gmail.com
+      </a>
+    </nav>
 
     <div class="hdr__actions">
       <div class="hdr__lang">
@@ -74,9 +109,9 @@ function downloadCV(): void {
   position: sticky;
   top: 0;
   z-index: $z-sticky;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  justify-content: space-between;
   gap: $space-4;
   padding: $space-4 $space-5;
   background: color-mix(in srgb, var(--color-bg) 85%, transparent);
@@ -84,7 +119,7 @@ function downloadCV(): void {
   border-bottom: 1px solid var(--color-border);
 
   @media (max-width: $bp-tablet) {
-    flex-wrap: wrap;
+    grid-template-columns: 1fr auto;
     padding: $space-3 $space-4;
   }
 }
@@ -116,6 +151,41 @@ function downloadCV(): void {
   font-family: $font-mono;
   font-size: $fs-sm;
   color: var(--color-muted);
+}
+
+.hdr__contacts {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $space-2;
+  flex-wrap: wrap;
+
+  // On tablet/mobile the contacts row drops below the brand row instead of
+  // squeezing into the centre column.
+  @media (max-width: $bp-tablet) {
+    grid-column: 1 / -1;
+    order: 3;
+    justify-content: flex-start;
+  }
+}
+
+.hdr__contact {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2 $space-3;
+  font-family: $font-mono;
+  font-size: $fs-sm;
+  color: var(--color-muted);
+  border-radius: $radius-md;
+  transition: color $transition-fast, background $transition-fast;
+
+  &:hover {
+    color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-panel) 70%, transparent);
+  }
+
+  svg { flex-shrink: 0; }
 }
 
 .hdr__actions {

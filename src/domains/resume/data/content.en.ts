@@ -98,7 +98,7 @@ export const CONTENT_EN: PeriodContentMap = Object.freeze({
   },
 
   [PeriodSlug.MedService]: {
-    title: 'Mеd-Serviсe',
+    title: 'Med-service',
     subtitle: 'Bitrix Architect',
     location: 'Dnipro',
     url: 'https://online-apteka.com.ua',
@@ -125,7 +125,7 @@ export const CONTENT_EN: PeriodContentMap = Object.freeze({
     subtitle: 'Full-Stack Developer',
     location: 'remote',
     url: null,
-    context: 'Built an e-commerce store from scratch (in parallel with Mеd-Serviсe).',
+    context: 'Built an e-commerce store from scratch (in parallel with Med-service).',
     bullets: [
       'Frontend: vanilla JS, Gulp, SASS, HTML, Photoshop assets.',
       'Backend: PHP 7.4, Laravel 7, MySQL, Ubuntu.',

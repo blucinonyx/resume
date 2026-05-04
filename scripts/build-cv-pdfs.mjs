@@ -8,7 +8,7 @@ const root = resolve(__dirname, '..');
 
 const SOURCES = [
   { md: 'resume.file/canonical/resume.en.md', pdf: 'public/cv-shmakov-en.pdf' },
-  { md: 'resume.file/canonical/resume.uk.md', pdf: 'public/cv-shmakov-uk.pdf' },
+  { md: 'resume.file/canonical/resume.ua.md', pdf: 'public/cv-shmakov-ua.pdf' },
 ];
 
 const PDF_CSS = `

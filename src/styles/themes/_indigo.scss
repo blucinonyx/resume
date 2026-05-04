@@ -1,0 +1,55 @@
+// Indigo theme — Buddhist-philosophy-inspired palette.
+//
+// Deep indigo base = midnight sky during meditation, the colour of the Ajna
+// chakra (insight / wisdom). Saffron-gold accent = the colour of monastic
+// robes; warm and authoritative. Lotus-cream text = softer than pure white,
+// reads as deliberate and considered. Cinnabar / temple-green / lotus-violet
+// for the type accents — each carries a specific Buddhist association
+// (courage, harmony, wisdom) without becoming costume-y.
+//
+// The end effect should feel quiet, mature, and clearly intentional — the
+// signal a senior engineer's site sends without trying to look "cyber".
+
+[data-theme='indigo'] {
+  // Surfaces — deep indigo, like a cleared night sky over a stupa.
+  --color-bg: #0d0a26;
+  --color-bg-grad: radial-gradient(ellipse at top, #1a1644 0%, #0d0a26 60%);
+  --color-panel: #15123a;
+  --color-panel-2: #1c1748;
+  --color-border: #2d2868;
+  --color-border-strong: #4a3f95;
+
+  // Text — lotus cream, not stark white. Easier on the eye, more "considered".
+  --color-text: #ede4d3;
+  --color-text-strong: #fbf6e8;
+  --color-muted: #8b86b8;
+
+  // Brand / semantic — saffron-gold as the primary accent (monk robes).
+  --color-accent: #e6a647;
+  --color-accent-hover: #f4be6a;
+  --color-success: #6db588;        // temple-courtyard green
+  --color-warning: #d97c5a;        // terracotta
+  --color-danger: #c2483b;         // cinnabar (Tibetan vermilion)
+  --color-magenta: #b67ad9;        // lotus violet
+  --color-rose: #e08fa0;
+
+  // Type-specific (work / edu / military) — chosen for symbolic fit.
+  --color-type-work: var(--color-accent);   // saffron — disciplined practice
+  --color-type-edu: var(--color-magenta);   // lotus violet — wisdom
+  --color-type-mil: var(--color-danger);    // cinnabar — courage
+
+  // Glow effects — softer than the dark/cyber themes; this palette is
+  // meant to feel quiet, not buzzing.
+  --glow-accent: 0 0 14px rgba(230, 166, 71, 0.35);
+  --glow-success: 0 0 8px rgba(109, 181, 136, 0.4);
+  --glow-magenta: 0 0 14px rgba(182, 122, 217, 0.35);
+  --glow-warning: 0 0 14px rgba(217, 124, 90, 0.35);
+
+  // Shadows — deep indigo tint instead of pure black, so the depth still
+  // reads as part of the palette.
+  --shadow-card: 0 4px 12px rgba(13, 10, 38, 0.5);
+  --shadow-panel: 0 12px 30px rgba(13, 10, 38, 0.6);
+  --shadow-deep: 0 24px 60px rgba(13, 10, 38, 0.7);
+
+  color-scheme: dark;
+}

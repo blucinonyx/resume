@@ -3,6 +3,7 @@
 @use './themes/dark';
 @use './themes/light';
 @use './themes/cyber';
+@use './themes/indigo';
 
 *,
 *::before,
@@ -48,4 +49,39 @@ button {
 ::selection {
   background: var(--color-accent);
   color: var(--color-bg);
+}
+
+// Scrollbar — themed in the accent colour of whichever theme is active.
+// Each tab strip already opts out of scrollbars locally; this only applies
+// to the page (html/body) and any other scroll container that doesn't
+// override `scrollbar-width`.
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-accent) var(--color-panel);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-panel);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: $radius-md;
+  // Inset border in track-colour creates a "padded" thumb that's slimmer
+  // than the track — looks intentional and themed rather than a default
+  // browser bar.
+  border: 2px solid var(--color-panel);
+  background-clip: padding-box;
+  transition: background-color $transition-fast;
+
+  &:hover {
+    background: var(--color-accent-hover);
+    background-clip: padding-box;
+  }
+}
+::-webkit-scrollbar-corner {
+  background: var(--color-panel);
 }

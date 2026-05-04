@@ -12,11 +12,11 @@ $space-6: 2rem;      // 32
 $space-7: 3rem;      // 48
 $space-8: 4rem;      // 64
 
-// Radius
-$radius-sm: 4px;
-$radius-md: 8px;
-$radius-lg: 12px;
-$radius-xl: 16px;
+// Radius — in rem so they scale with the root font-size (14px base = 1rem).
+$radius-sm: 0.25rem;   // 3.5px
+$radius-md: 0.5rem;    // 7px
+$radius-lg: 0.75rem;   // 10.5px
+$radius-xl: 1rem;      // 14px
 $radius-full: 999px;
 
 // Typography

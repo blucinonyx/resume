@@ -1,20 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import AppHeader from '@/shared/ui/AppHeader.vue';
 import CareerStrip from '@/shared/ui/CareerStrip.vue';
 import { ContentService } from '@/domains/resume/services/ContentService';
 import { PeriodSlug, PeriodType } from '@/shared/types/Period';
 
-const router = useRouter();
 const route = useRoute();
-
-router.afterEach(() => {
-  requestAnimationFrame(() => {
-    const brand = document.querySelector<HTMLElement>('.hdr__brand');
-    brand?.focus({ preventScroll: true });
-  });
-});
 
 const periodSlug = computed<PeriodSlug | null>(() => {
   if (route.name !== 'period') return null;
