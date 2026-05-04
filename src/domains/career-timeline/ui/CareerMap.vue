@@ -3,46 +3,22 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18nStore } from '@/domains/i18n/stores/I18nStore';
 import { ContentService } from '@/domains/resume/services/ContentService';
-import { Lang } from '@/shared/types/Lang';
+import { useLang } from '@/shared/composables/useLang';
 import type { PeriodMeta, PeriodSlug, PeriodContent } from '@/shared/types/Period';
 import PinnedRoleCard from './PinnedRoleCard.vue';
 import SpineRow from './SpineRow.vue';
+import { CareerMapService } from '../services/CareerMapService';
 
 const router = useRouter();
 const i18n = useI18nStore();
+const lang = useLang();
+const t = computed(() => lang.value.careerMap);
 
 const allPeriods = computed<PeriodMeta[]>(() => [...ContentService.all()].reverse());
-
-const pinned = computed<PeriodMeta | undefined>(
-  () => allPeriods.value.find((p) => p.current) ?? allPeriods.value[0],
-);
-
-const rest = computed<PeriodMeta[]>(() => {
-  const current = pinned.value;
-  return current
-    ? allPeriods.value.filter((p) => p.slug !== current.slug)
-    : allPeriods.value;
-});
-
-const yearRange = computed<string>(() => {
-  if (rest.value.length === 0) return '';
-  const earliest = Math.min(...rest.value.map((p) => p.startYear));
-  const latest = Math.max(...rest.value.map((p) => p.endYear ?? p.startYear));
-  return `${earliest} — ${latest}`;
-});
-
-const labels = {
-  [Lang.EN]: {
-    headline: 'Senior Full-Stack · Laravel + Vue · 10+ years · Tech Lead',
-    previous: '// previous',
-  },
-  [Lang.UK]: {
-    headline: 'Senior Full-Stack · Laravel + Vue · 10+ років · Tech Lead',
-    previous: '// раніше',
-  },
-} as const;
-
-const t = computed(() => labels[i18n.current]);
+const split = computed(() => CareerMapService.splitByPin(allPeriods.value));
+const pinned = computed(() => split.value.pinned);
+const rest = computed(() => split.value.rest);
+const yearRange = computed(() => CareerMapService.yearRange(rest.value));
 
 function go(slug: PeriodSlug): void {
   router.push({ name: 'period', params: { slug } });
@@ -89,53 +65,4 @@ function contentOf(p: PeriodMeta): PeriodContent {
   </div>
 </template>
 
-<style lang="scss" scoped>
-.map {
-  display: flex;
-  flex-direction: column;
-  gap: $space-3;
-  padding: $space-5 0 $space-7;
-  max-width: 720px;
-  margin: 0 auto;
-}
-
-.map__intro {
-  text-align: center;
-  margin-bottom: $space-2;
-}
-
-.map__headline {
-  font-family: $font-sans;
-  font-size: $fs-sm;
-  color: var(--color-muted);
-  margin: 0;
-}
-
-.map__separator {
-  text-align: center;
-  font-family: $font-mono;
-  font-size: $fs-xs;
-  color: var(--color-muted);
-  letter-spacing: 0.1em;
-  margin: $space-4 0 $space-2;
-}
-
-.map__list {
-  display: flex;
-  flex-direction: column;
-  gap: $space-2;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.map__item {
-  margin: 0;
-}
-
-@media (max-width: 640px) {
-  .map {
-    padding: $space-4 $space-3 $space-6;
-  }
-}
-</style>
+<style lang="scss" scoped src="@/domains/career-timeline/styles/CareerMap.scss"></style>

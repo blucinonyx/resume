@@ -1,21 +1,8 @@
 // Pure-TS class that produces "ingestion" tick data.
 // Lives outside Vue/Pinia so it stays unit-testable; used both inline and (later) in a Web Worker.
 
-export interface SimTick {
-  t: number;
-  eventsPerSec: number;
-  totalToday: number;
-  bufferDepth: number;
-  p99: number;
-  backpressurePct: number;
-}
-
-export interface SimConfig {
-  tickIntervalMs: number;
-  targetEventsPerSec: number;
-  rampSeconds: number;
-  startingTotal: number;
-}
+import type { SimTick, SimConfig } from '../interface/SimTypes';
+export type { SimTick, SimConfig };
 
 export const DEFAULT_CONFIG: SimConfig = Object.freeze({
   tickIntervalMs: 250,
@@ -60,5 +47,22 @@ export class IngestionSimulator {
   reset(): void {
     this.ticksElapsed = 0;
     this.totalToday = this.cfg.startingTotal;
+  }
+
+  /**
+   * Pure helper for the sparkline strip: pads `values` to `count` slots,
+   * scales them into the [`minPct`, 100] range so flat samples still draw
+   * a visible bar. Used by PipelineSimulator's <template>.
+   */
+  static barHeights(values: readonly number[], count = 24, minPct = 25): number[] {
+    if (values.length === 0) {
+      return Array.from({ length: count }, () => minPct);
+    }
+    const max = Math.max(...values, 1);
+    const padded = [
+      ...Array(Math.max(0, count - values.length)).fill(0),
+      ...values,
+    ];
+    return padded.slice(-count).map((v) => minPct + (v / max) * (100 - minPct));
   }
 }

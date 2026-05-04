@@ -1,18 +1,11 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { useI18nStore } from '@/domains/i18n/stores/I18nStore';
-import { Lang } from '@/shared/types/Lang';
+import { useLang } from '@/shared/composables/useLang';
+import type { IdeTab } from '../interface/IdeTab';
 
-interface Tab {
-  key: string;
-  filename: string;
-  lang: string;
-  code: string;
-}
+const lang = useLang();
 
-const i18n = useI18nStore();
-
-const TABS: Tab[] = [
+const TABS: readonly IdeTab[] = Object.freeze([
   {
     key: 'vb6',
     filename: 'PropCalc.bas',
@@ -87,22 +80,12 @@ HAVING SUM(o.qty * o.price) > 1000
 ORDER BY revenue DESC
 LIMIT 20;`,
   },
-];
+]);
 
-const labels = {
-  [Lang.EN]: {
-    title: 'Step IT Academy IDE · 2010—2015',
-    note: 'Five years of evening classes covering JavaScript, C++, C#, CI, PHP, HTML and SQL. The VB6 calculator on the left tab eventually became the demo that landed me my first commercial role.',
-  },
-  [Lang.UK]: {
-    title: 'Step IT Academy IDE · 2010—2015',
-    note: 'П\'ять років вечірніх занять: JavaScript, C++, C#, CI, PHP, HTML, SQL. VB6-калькулятор у першій вкладці став демо що принесло першу комерційну роботу.',
-  },
-} as const;
-const t = computed(() => labels[i18n.current]);
+const t = computed(() => lang.value.periods.stepAcademy);
 
 const activeKey = ref<string>(TABS[0].key);
-const active = computed(() => TABS.find((t) => t.key === activeKey.value) ?? TABS[0]);
+const active = computed(() => TABS.find((tab) => tab.key === activeKey.value) ?? TABS[0]);
 </script>
 
 <template>
@@ -140,112 +123,4 @@ const active = computed(() => TABS.find((t) => t.key === activeKey.value) ?? TAB
   </div>
 </template>
 
-<style lang="scss" scoped>
-.ide {
-  display: flex;
-  flex-direction: column;
-  gap: $space-3;
-  font-family: $font-mono;
-}
-
-.ide__head {
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: $space-2;
-}
-
-.ide__title {
-  font-size: $fs-xs;
-  color: var(--color-type-edu);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.ide__chrome {
-  background: #001a4b;
-  border: 1px solid var(--color-border);
-  border-radius: $radius-md;
-  overflow: hidden;
-  color: #e6e9f5;
-}
-
-.ide__tabs {
-  display: flex;
-  gap: 1px;
-  background: #0a1f5e;
-  padding: 4px 4px 0;
-  flex-wrap: wrap;
-}
-
-.ide__tab {
-  background: #001a4b;
-  border: none;
-  color: #aab2c8;
-  padding: 6px 10px;
-  font-family: $font-mono;
-  font-size: 0.7rem;
-  cursor: pointer;
-  border-radius: 3px 3px 0 0;
-  border-bottom: 2px solid transparent;
-  transition: color $transition-fast;
-
-  &--on {
-    background: #002b7a;
-    color: #ffeb3b;
-    border-bottom-color: #ffeb3b;
-  }
-
-  &:hover:not(.ide__tab--on) {
-    color: #e6e9f5;
-  }
-}
-
-.ide__editor {
-  background: #002b7a;
-  padding: $space-3 $space-4;
-  font-size: 0.72rem;
-  line-height: 1.55;
-  min-height: 220px;
-  position: relative;
-}
-
-.ide__code {
-  margin: 0;
-  white-space: pre;
-  overflow-x: auto;
-  color: #ffffff;
-
-  // Crude syntax highlighting via tokenisation in the eye
-  font-family: $font-mono;
-}
-
-.ide__statusbar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  background: #ffeb3b;
-  color: #001a4b;
-  padding: 2px 8px;
-  font-size: 0.65rem;
-  font-weight: $fw-bold;
-  letter-spacing: 0.05em;
-}
-
-.ide__cursor {
-  animation: ideBlink 1s steps(1) infinite;
-}
-
-@keyframes ideBlink {
-  50% { opacity: 0; }
-}
-
-.ide__note {
-  margin: 0;
-  font-family: $font-sans;
-  font-size: $fs-sm;
-  color: var(--color-muted);
-  line-height: 1.5;
-}
-</style>
+<style lang="scss" scoped src="@/domains/period-step-academy/styles/RetroIDE.scss"></style>

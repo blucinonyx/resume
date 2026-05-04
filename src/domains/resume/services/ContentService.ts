@@ -4,6 +4,7 @@ import {
   type PeriodMeta,
   type PeriodSlug,
 } from '@/shared/types/Period';
+import { DateFormatService } from '@/shared/utils/dates';
 import { CONTENT_EN } from '../data/content.en';
 import { CONTENT_UK } from '../data/content.uk';
 import { PERIODS, PERIOD_BY_SLUG } from '../data/periods';
@@ -27,23 +28,14 @@ export class ContentService {
     return map[slug] ?? null;
   }
 
+  // Date formatting now lives in shared/utils/dates so it can be unit-
+  // tested without pulling the resume content map. Thin delegators keep
+  // the existing call sites (`ContentService.formatRange/...`) working.
   static formatRange(meta: PeriodMeta, lang: Lang): string {
-    const monthsEn = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    const monthsUk = ['Січ', 'Лют', 'Бер', 'Кві', 'Тра', 'Чер', 'Лип', 'Сер', 'Вер', 'Жов', 'Лис', 'Гру'];
-    const months = lang === Lang.UK ? monthsUk : monthsEn;
-    const present = lang === Lang.UK ? 'тепер' : 'present';
-
-    const fromIdx = meta.startMonth - 1;
-    const from = `${months[fromIdx] ?? ''} ${meta.startYear}`.trim();
-    if (meta.endYear === null) return `${from} → ${present}`;
-    const toIdx = (meta.endMonth ?? 1) - 1;
-    const to = `${months[toIdx] ?? ''} ${meta.endYear}`.trim();
-    return `${from} – ${to}`;
+    return DateFormatService.formatRange(meta, lang);
   }
 
   static shortRange(meta: PeriodMeta): string {
-    if (meta.endYear === null) return `${meta.startYear} → now`;
-    if (meta.startYear === meta.endYear) return String(meta.startYear);
-    return `${meta.startYear}—${meta.endYear}`;
+    return DateFormatService.shortRange(meta);
   }
 }

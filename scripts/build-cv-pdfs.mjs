@@ -1,14 +1,25 @@
 import { mdToPdf } from 'md-to-pdf';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, '..');
 
+// Profile photo lives in `resume.file/` (gitignored). Embed it as a base64
+// data-URI so Puppeteer doesn't need `file://` access from inside the PDF
+// render. The placeholder line in each canonical .md is swapped for the
+// <img> at runtime — canonical files stay text-only.
+const PHOTO_PATH = resolve(root, 'resume.file/profile-photo.jpeg');
+const photoBuffer = await readFile(PHOTO_PATH);
+const PHOTO_DATA_URI = `data:image/jpeg;base64,${photoBuffer.toString('base64')}`;
+// Marker comment in canonical/.md that gets swapped for the <img> here
+// at runtime — keeps the source files free of bulky base64 or stale placeholder copy.
+const PHOTO_PLACEHOLDER_RE = /<!--\s*@cv-photo\s*-->/;
+
 const SOURCES = [
-  { md: 'resume.file/canonical/resume.en.md', pdf: 'public/cv-shmakov-en.pdf' },
-  { md: 'resume.file/canonical/resume.ua.md', pdf: 'public/cv-shmakov-ua.pdf' },
+  { md: 'resume.file/canonical/resume.en.md', pdf: 'public/cv-shmakov-en.pdf', alt: 'Olexander Shmakov' },
+  { md: 'resume.file/canonical/resume.ua.md', pdf: 'public/cv-shmakov-ua.pdf', alt: 'Олександр Шмаков' },
 ];
 
 const PDF_CSS = `
@@ -40,15 +51,29 @@ const PDF_CSS = `
   hr { border: none; border-top: 1px solid #e2e8f0; margin: 14pt 0; }
   code { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 9pt; color: #0284c7; }
   a { color: #0284c7; text-decoration: none; }
+  .cv-photo {
+    float: right;
+    width: 96pt;
+    height: 96pt;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 0 8pt 16pt;
+    border: 2pt solid #0284c7;
+    shape-outside: circle();
+  }
 `;
 
-async function generate({ md, pdf }) {
+async function generate({ md, pdf, alt }) {
   const mdPath = resolve(root, md);
   const pdfPath = resolve(root, pdf);
   await mkdir(dirname(pdfPath), { recursive: true });
 
+  const rawMd = await readFile(mdPath, 'utf-8');
+  const photoTag = `<img class="cv-photo" src="${PHOTO_DATA_URI}" alt="${alt}" />`;
+  const content = rawMd.replace(PHOTO_PLACEHOLDER_RE, photoTag);
+
   const out = await mdToPdf(
-    { path: mdPath },
+    { content },
     {
       dest: pdfPath,
       css: PDF_CSS,

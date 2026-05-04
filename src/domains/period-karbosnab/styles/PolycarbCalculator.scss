@@ -1,0 +1,455 @@
+$slope-1: #38bdf8;     // green в скріні (cyan-ish), використаємо accent
+$length-1: #6366f1;    // blue
+$slope-2: #f59e0b;     // orange
+$length-2: #1e3a8a;    // dark blue
+$roof-cyan: #5cd3d6;
+$roof-cyan-dark: #2b9b9e;
+
+.rc {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  background: linear-gradient(180deg, var(--color-panel), var(--color-panel-2));
+  border: 1px solid var(--color-border);
+  border-radius: $radius-md;
+  padding: $space-4;
+  font-family: $font-sans;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35), 0 4px 8px rgba(0, 0, 0, 0.25);
+}
+
+.rc__title {
+  margin: 0;
+  font-size: $fs-sm;
+  font-weight: $fw-bold;
+  color: var(--color-text-strong);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.rc__tabs {
+  display: flex;
+  gap: $space-2;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.rc__tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  padding: $space-2 $space-2 $space-3;
+  color: var(--color-muted);
+  font-family: $font-sans;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all $transition-fast;
+
+  &:hover {
+    color: var(--color-text);
+  }
+
+  &--on {
+    color: var(--color-accent);
+    border-bottom-color: var(--color-accent);
+  }
+}
+
+.rc__tab-ico {
+  flex-shrink: 0;
+}
+
+.rc__tab-name {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: $fw-bold;
+  white-space: nowrap;
+}
+
+.rc__body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  // Row 1 = section titles, Row 2 = stage / variants (1fr stretch),
+  // Row 3 = inputs / calc-button.
+  grid-template-rows: auto 1fr auto;
+  gap: $space-2 $space-4;
+  align-items: stretch;
+
+  @media (max-width: 720px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
+}
+
+.rc__pane-title {
+  margin: 0;
+  font-size: $fs-xs;
+  font-weight: $fw-semibold;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.rc__cell--title-left { grid-column: 1; grid-row: 1; }
+.rc__cell--title-right { grid-column: 2; grid-row: 1; }
+.rc__cell--stage {
+  grid-column: 1;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+}
+.rc__cell--variants { grid-column: 2; grid-row: 2; }
+.rc__cell--inputs {
+  grid-column: 1;
+  grid-row: 3;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+.rc__cell--calc {
+  grid-column: 2;
+  grid-row: 3;
+  align-self: start;   // sit at the TOP of row 3, keep its natural compact size
+  width: 100%;
+}
+
+@media (max-width: 720px) {
+  .rc__cell--title-left, .rc__cell--title-right,
+  .rc__cell--stage, .rc__cell--variants,
+  .rc__cell--inputs, .rc__cell--calc {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
+
+// SVG stage — fills the available width, draws roof from computed iso projection
+.rc__stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at center, color-mix(in srgb, $roof-cyan 10%, transparent), transparent 70%),
+    var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: $radius-sm;
+  padding: $space-3 $space-2;
+  overflow: hidden;
+  min-height: 280px;
+  flex: 1; // fill the row-2 cell when wrapped in .rc__cell--stage
+}
+
+.rc__svg {
+  width: 100%;
+  height: auto;
+  max-height: 320px;
+  display: block;
+}
+
+.rc__svg-face {
+  fill: url(#kc-face);
+  stroke: $roof-cyan-dark;
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.35));
+}
+
+.rc__svg-face--side {
+  // Light off-cream side panels — match the karbosnab.com reference where
+  // thickness reads as a clearly contrasting band against the cyan top face.
+  fill: #e7eef0;
+  stroke: #97a4a8;
+  stroke-width: 0.8;
+  filter: none;
+  opacity: 1;
+}
+
+.rc__svg-face--bottom {
+  fill: #c9d2d4;
+  stroke: #97a4a8;
+  stroke-width: 0.6;
+  filter: none;
+  opacity: 0.9;
+}
+
+.rc__svg-shine {
+  fill: url(#kc-shine);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.55;
+}
+
+.rc__svg-edge {
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke-width 180ms ease, opacity 180ms ease;
+  opacity: 0.92;
+
+  &--slope1 { stroke: $slope-1; }
+  &--length1 { stroke: $length-1; }
+  &--slope2 { stroke: $slope-2; }
+  &--length2 { stroke: $length-2; }
+
+  &--hot {
+    stroke-width: 7;
+    opacity: 1;
+    filter: url(#kc-glow);
+  }
+}
+
+// Highlight the input row whose edge is currently selected.
+.rc__size {
+  border-radius: $radius-sm;
+  padding: 4px 6px;
+  margin: -4px -6px;
+  transition: background 160ms ease;
+}
+
+.rc__size--hot {
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+}
+
+.rc__sizes-key {
+  font-size: 0.7rem;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.rc__sizes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-2;
+  // Reserve height for the 2-row case (double-slope) so the Calculate button
+  // doesn't shift when switching between roof kinds.
+  min-height: 132px;
+  align-content: start;
+}
+
+.rc__size {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rc__size-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  color: var(--color-text);
+  font-weight: $fw-bold;
+
+  em {
+    font-style: normal;
+    font-weight: $fw-normal;
+    color: var(--color-muted);
+    margin-left: 2px;
+  }
+}
+
+.rc__dot {
+  width: 14px;
+  height: 3px;
+  border-radius: 1px;
+
+  &--slope { background: $slope-1; }
+  &--length { background: $length-1; }
+  &--slope2 { background: $slope-2; }
+  &--length2 { background: $length-2; }
+}
+
+.rc__size-input {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: $radius-sm;
+  padding: 2px 4px;
+
+  &:focus-within {
+    border-color: var(--color-accent);
+  }
+
+  input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--color-text-strong);
+    font-family: $font-sans;
+    font-size: $fs-sm;
+    font-weight: $fw-semibold;
+    width: 100%;
+    min-width: 0;
+    padding: 2px 0;
+    text-align: right;
+
+    -moz-appearance: textfield;
+    appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}
+
+.rc__size-unit {
+  font-size: 0.7rem;
+  color: var(--color-muted);
+  font-family: $font-mono;
+}
+
+.rc__step {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-panel-2);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  border-radius: $radius-sm;
+  font-family: $font-sans;
+  font-size: $fs-sm;
+  font-weight: $fw-bold;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  transition: all $transition-fast;
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: var(--color-bg);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.rc__calc {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  border: 1px solid var(--color-accent);
+  border-radius: $radius-sm;
+  padding: $space-3 $space-4;
+  font-family: $font-sans;
+  font-size: $fs-sm;
+  font-weight: $fw-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover {
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+  }
+}
+
+// Variants
+.rc__variants {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.rc__variant {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) minmax(0, 120px);
+  column-gap: $space-3;
+  row-gap: 4px;
+  padding: $space-3;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: $radius-sm;
+  align-items: center;
+
+  flex: 1 1 0;
+  min-height: 84px;
+}
+
+.rc__variant-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: $radius-sm;
+  border: 1px solid var(--color-border);
+  // Background is set inline via :style — depends on selected color.
+  transition: background 200ms ease;
+  align-self: center;
+}
+
+.rc__variant-body {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.rc__variant-name {
+  font-size: $fs-xs;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rc__variant-price {
+  font-family: $font-mono;
+  font-size: $fs-sm;
+  font-weight: $fw-bold;
+  color: var(--color-text-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.rc__variant-opts {
+  grid-column: 3;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.rc__select {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 4px $space-2;
+  border-radius: $radius-sm;
+  font-family: $font-sans;
+  font-size: 0.7rem;
+  cursor: pointer;
+  width: 100%;
+  min-width: 0;
+  text-overflow: ellipsis;
+
+  &:focus {
+    outline: 1px solid var(--color-accent);
+    outline-offset: 0;
+    border-color: var(--color-accent);
+  }
+}
+
+.rc__variant-thumb {
+  grid-column: 1;
+  grid-row: 1;
+}

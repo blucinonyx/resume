@@ -1,0 +1,230 @@
+.pc {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  font-family: $font-mono;
+  font-size: $fs-xs;
+}
+
+.pc__head {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: $space-2;
+}
+
+.pc__title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $space-2;
+  flex-wrap: wrap;
+}
+
+.pc__live {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: $fs-xs;
+  color: var(--color-success);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+
+  &::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: $radius-full;
+    background: var(--color-success);
+    box-shadow: var(--glow-success);
+    animation: pcPulse 1.4s infinite;
+  }
+}
+
+.pc__sub {
+  font-size: 0.62rem;
+  color: var(--color-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pc__badges {
+  display: inline-flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.pc__badge {
+  font-size: 0.6rem;
+  padding: 2px 6px;
+  background: var(--color-panel-2);
+  border: 1px solid var(--color-border);
+  border-radius: $radius-sm;
+  color: var(--color-muted);
+  letter-spacing: 0.04em;
+  font-weight: $fw-bold;
+
+  &--visa {
+    color: #1a1f71;
+    background: linear-gradient(180deg, #f0c14b, #e8b03a);
+    border-color: #c79722;
+  }
+  &--mc {
+    color: #fff;
+    background: linear-gradient(135deg, #eb001b 50%, #f79e1b 50%);
+    border-color: #c30000;
+  }
+}
+
+.pc--paused .pc__live {
+  color: var(--color-muted);
+
+  &::before {
+    animation-play-state: paused;
+    background: var(--color-muted);
+    box-shadow: none;
+  }
+}
+
+@keyframes pcPulse {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.pc__stats {
+  display: flex;
+  gap: $space-4;
+  flex-wrap: wrap;
+  color: var(--color-muted);
+
+  strong {
+    color: var(--color-accent);
+    font-weight: $fw-semibold;
+    margin-left: 2px;
+  }
+}
+
+.pc__log {
+  list-style: none;
+  margin: 0;
+  padding: $space-3;
+  background: var(--color-panel-2);
+  border: 1px solid var(--color-border);
+  border-radius: $radius-md;
+  min-height: 220px;
+  max-height: 220px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 3px;
+}
+
+.pc__line {
+  display: flex;
+  gap: $space-2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  animation: pcLineIn 200ms ease-out;
+}
+
+@keyframes pcLineIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pc__ts {
+  color: var(--color-muted);
+  flex-shrink: 0;
+}
+
+.pc__brand {
+  flex-shrink: 0;
+  font-size: 0.55rem;
+  font-weight: $fw-bold;
+  padding: 1px 4px;
+  border-radius: 2px;
+  letter-spacing: 0.04em;
+
+  &--visa {
+    color: #1a1f71;
+    background: #f0c14b;
+  }
+  &--mc {
+    color: #fff;
+    background: linear-gradient(135deg, #eb001b 50%, #f79e1b 50%);
+  }
+}
+
+.pc__status {
+  flex-shrink: 0;
+  font-weight: $fw-semibold;
+}
+
+.pc__line--init .pc__status {
+  color: var(--color-text);
+}
+.pc__line--auth .pc__status,
+.pc__line--3ds .pc__status {
+  color: var(--color-warning);
+}
+.pc__line--approved .pc__status {
+  color: var(--color-success);
+}
+.pc__line--declined .pc__status {
+  color: var(--color-magenta);
+}
+
+.pc__meta {
+  color: var(--color-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pc__controls {
+  display: flex;
+  gap: $space-2;
+}
+
+.pc__btn {
+  background: var(--color-panel-2);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: $space-2 $space-3;
+  border-radius: $radius-md;
+  font-family: $font-mono;
+  font-size: $fs-xs;
+  cursor: pointer;
+  transition: all $transition-fast;
+
+  &:hover:not(:disabled) {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  &--primary {
+    background: var(--color-accent);
+    color: var(--color-bg);
+    border-color: var(--color-accent);
+
+    &:hover:not(:disabled) {
+      background: var(--color-accent-hover);
+      border-color: var(--color-accent-hover);
+      color: var(--color-bg);
+    }
+  }
+}
