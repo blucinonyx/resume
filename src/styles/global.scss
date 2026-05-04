@@ -85,3 +85,148 @@ html {
 ::-webkit-scrollbar-corner {
   background: var(--color-panel);
 }
+
+// CSS-only tooltip — opt in by adding `data-tooltip="..."` to any element.
+// Themed (panel + accent border), pulls the active palette so it doesn't
+// look like a stray OS popup. Use alongside `aria-label` for screen-reader
+// equivalence (don't combine with `title`, which would double-pop).
+//
+// Position modes (set via `data-tooltip-pos`):
+//   • default / "top"   — above the element     (header → bottom)
+//   • "bottom"          — below the element     (use in the sticky header so tips don't clip off-screen)
+//   • "left"            — left of the element
+//   • "right"           — right of the element
+//
+// Each mode flips both the bubble (::after) AND its arrow (::before).
+[data-tooltip] {
+  position: relative;
+}
+[data-tooltip]:hover::after,
+[data-tooltip]:focus-visible::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  padding: 4px 10px;
+  background: var(--color-panel);
+  color: var(--color-text);
+  border: 1px solid var(--color-accent);
+  border-radius: $radius-md;
+  box-shadow: var(--shadow-card);
+  font-family: $font-mono;
+  font-size: 11px;
+  line-height: 1.4;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 99999;
+  animation: tooltip-fade $transition-fast both;
+}
+[data-tooltip]:hover::before,
+[data-tooltip]:focus-visible::before {
+  content: '';
+  position: absolute;
+  border: 5px solid transparent;
+  pointer-events: none;
+  z-index: 99999;
+}
+
+// ── default: ABOVE the element ──────────────────────────────────────
+[data-tooltip]:hover::after,
+[data-tooltip]:focus-visible::after {
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+[data-tooltip]:hover::before,
+[data-tooltip]:focus-visible::before {
+  bottom: calc(100% + 1px);
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: var(--color-accent);
+}
+@keyframes tooltip-fade {
+  from { opacity: 0; transform: translate(-50%, 4px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+// ── BELOW the element (sticky header etc.) ──────────────────────────
+[data-tooltip-pos='bottom']:hover::after,
+[data-tooltip-pos='bottom']:focus-visible::after {
+  top: calc(100% + 6px);
+  bottom: auto;
+  animation: tooltip-fade-down $transition-fast both;
+}
+[data-tooltip-pos='bottom']:hover::before,
+[data-tooltip-pos='bottom']:focus-visible::before {
+  top: calc(100% + 1px);
+  bottom: auto;
+  border-top-color: transparent;
+  border-bottom-color: var(--color-accent);
+}
+@keyframes tooltip-fade-down {
+  from { opacity: 0; transform: translate(-50%, -4px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
+}
+
+// ── LEFT of the element ─────────────────────────────────────────────
+[data-tooltip-pos='left']:hover::after,
+[data-tooltip-pos='left']:focus-visible::after {
+  top: 50%;
+  bottom: auto;
+  right: calc(100% + 6px);
+  left: auto;
+  transform: translateY(-50%);
+  animation: tooltip-fade-left $transition-fast both;
+}
+[data-tooltip-pos='left']:hover::before,
+[data-tooltip-pos='left']:focus-visible::before {
+  top: 50%;
+  bottom: auto;
+  right: calc(100% + 1px);
+  left: auto;
+  transform: translateY(-50%);
+  border-top-color: transparent;
+  border-left-color: var(--color-accent);
+}
+@keyframes tooltip-fade-left {
+  from { opacity: 0; transform: translate(4px, -50%); }
+  to   { opacity: 1; transform: translate(0, -50%); }
+}
+
+// ── RIGHT of the element ────────────────────────────────────────────
+[data-tooltip-pos='right']:hover::after,
+[data-tooltip-pos='right']:focus-visible::after {
+  top: 50%;
+  bottom: auto;
+  left: calc(100% + 6px);
+  transform: translateY(-50%);
+  animation: tooltip-fade-right $transition-fast both;
+}
+[data-tooltip-pos='right']:hover::before,
+[data-tooltip-pos='right']:focus-visible::before {
+  top: 50%;
+  bottom: auto;
+  left: calc(100% + 1px);
+  transform: translateY(-50%);
+  border-top-color: transparent;
+  border-right-color: var(--color-accent);
+}
+@keyframes tooltip-fade-right {
+  from { opacity: 0; transform: translate(-4px, -50%); }
+  to   { opacity: 1; transform: translate(0, -50%); }
+}
+
+// ── Sticky-header default: every tooltip inside `.hdr` flips downward,
+//    so it never tries to render above the page edge. Same rules as the
+//    explicit `[data-tooltip-pos='bottom']` modifier.
+.hdr [data-tooltip]:hover::after,
+.hdr [data-tooltip]:focus-visible::after {
+  top: calc(100% + 6px);
+  bottom: auto;
+  animation: tooltip-fade-down $transition-fast both;
+}
+.hdr [data-tooltip]:hover::before,
+.hdr [data-tooltip]:focus-visible::before {
+  top: calc(100% + 1px);
+  bottom: auto;
+  border-top-color: transparent;
+  border-bottom-color: var(--color-accent);
+}

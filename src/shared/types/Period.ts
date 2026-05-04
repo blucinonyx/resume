@@ -6,10 +6,12 @@ export enum PeriodType {
   Military = 'mil',
 }
 
-export const TYPE_ICON: Readonly<Record<PeriodType, string>> = Object.freeze({
-  [PeriodType.Work]: '💼',
-  [PeriodType.Education]: '🎓',
-  [PeriodType.Military]: '⚓',
+// Lucide-style outline icon IDs. The matching `<symbol>` blocks are
+// defined inline once in CareerStrip.vue and referenced via `<use href>`.
+export const TYPE_ICON_ID: Readonly<Record<PeriodType, string>> = Object.freeze({
+  [PeriodType.Work]: 'i-briefcase',
+  [PeriodType.Education]: 'i-cap',
+  [PeriodType.Military]: 'i-anchor',
 });
 
 export enum PeriodSlug {

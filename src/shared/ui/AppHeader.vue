@@ -1,11 +1,63 @@
 <script setup lang="ts">
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useThemeStore } from '@/domains/theming/stores/ThemeStore';
 import { useI18nStore } from '@/domains/i18n/stores/I18nStore';
-import { THEME_LABELS } from '@/shared/types/Theme';
+import { THEME_LABELS, Theme } from '@/shared/types/Theme';
 import { LANG_LABELS, Lang } from '@/shared/types/Lang';
 
 const themeStore = useThemeStore();
 const i18nStore = useI18nStore();
+
+// Localised tooltip strings — same pattern as RoleLayout.vue (a frozen
+// dictionary keyed by Lang). Add a key here when you introduce a new
+// non-obvious control whose function isn't clear from its visual alone.
+const tooltips = {
+  [Lang.EN]: {
+    home: 'Home — back to the career timeline',
+    linkedin: 'LinkedIn — preferred way to reach me',
+    email: 'Send email · blucinonyx@gmail.com',
+    langBtn: (l: Lang) => `Switch interface to ${l === Lang.EN ? 'English' : 'Ukrainian'}`,
+    themeBtn: (t: Theme) => `Theme: ${THEME_LABELS[t]} · click to choose another`,
+    themeOption: (t: Theme) => `Switch to ${THEME_LABELS[t]} theme`,
+    download: 'Download CV as PDF',
+  },
+  [Lang.UK]: {
+    home: 'На головну — повернутись до career-timeline',
+    linkedin: 'LinkedIn — основний канал звʼязку',
+    email: 'Написати email · blucinonyx@gmail.com',
+    langBtn: (l: Lang) => `Переключити інтерфейс на ${l === Lang.EN ? 'англійську' : 'українську'}`,
+    themeBtn: (t: Theme) => `Тема: ${THEME_LABELS[t]} · клік щоб обрати іншу`,
+    themeOption: (t: Theme) => `Переключити на тему ${THEME_LABELS[t]}`,
+    download: 'Завантажити CV у PDF',
+  },
+} as const;
+const t = computed(() => tooltips[i18nStore.current]);
+
+const themeOpen = ref<boolean>(false);
+const themeRoot = ref<HTMLElement | null>(null);
+
+function pickTheme(t: Theme): void {
+  themeStore.set(t);
+  themeOpen.value = false;
+}
+
+function onDocClick(e: MouseEvent): void {
+  if (!themeOpen.value) return;
+  if (themeRoot.value && !themeRoot.value.contains(e.target as Node)) {
+    themeOpen.value = false;
+  }
+}
+function onKey(e: KeyboardEvent): void {
+  if (e.key === 'Escape') themeOpen.value = false;
+}
+onMounted(() => {
+  document.addEventListener('click', onDocClick);
+  document.addEventListener('keydown', onKey);
+});
+onBeforeUnmount(() => {
+  document.removeEventListener('click', onDocClick);
+  document.removeEventListener('keydown', onKey);
+});
 
 function downloadCV(): void {
   const lang = i18nStore.current;
@@ -17,7 +69,12 @@ function downloadCV(): void {
 
 <template>
   <header class="hdr">
-    <RouterLink to="/" class="hdr__brand">
+    <RouterLink
+      to="/"
+      class="hdr__brand"
+      :data-tooltip="t.home"
+      :aria-label="t.home"
+    >
       <span class="hdr__name">Olexander Shmakov</span>
       <span class="hdr__role">Senior Full-Stack · Laravel + Vue · 10+ years · Tech Lead</span>
     </RouterLink>
@@ -28,7 +85,8 @@ function downloadCV(): void {
         href="https://linkedin.com/in/shmakov-laravel"
         target="_blank"
         rel="noopener noreferrer"
-        title="LinkedIn — preferred contact"
+        :data-tooltip="t.linkedin"
+        :aria-label="t.linkedin"
       >
         <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
           <path
@@ -41,7 +99,8 @@ function downloadCV(): void {
       <a
         class="hdr__contact"
         href="mailto:blucinonyx@gmail.com"
-        title="Send email"
+        :data-tooltip="t.email"
+        :aria-label="t.email"
       >
         <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
           <path
@@ -65,23 +124,74 @@ function downloadCV(): void {
           type="button"
           class="hdr__lang-btn"
           :class="{ 'hdr__lang-btn--on': l === i18nStore.current }"
+          :data-tooltip="t.langBtn(l)"
+          :aria-label="t.langBtn(l)"
           @click="i18nStore.set(l)"
         >
           {{ LANG_LABELS[l] }}
         </button>
       </div>
 
+      <div
+        ref="themeRoot"
+        class="hdr__theme"
+        :class="{ 'hdr__theme--open': themeOpen }"
+      >
+        <button
+          type="button"
+          class="hdr__theme-toggle"
+          :data-tooltip="t.themeBtn(themeStore.current)"
+          :aria-label="t.themeBtn(themeStore.current)"
+          aria-haspopup="listbox"
+          :aria-expanded="themeOpen"
+          @click="themeOpen = !themeOpen"
+        >
+          <span class="hdr__theme-dot" />
+          {{ THEME_LABELS[themeStore.current] }}
+          <svg class="hdr__theme-caret" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true">
+            <path
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 9l6 6 6-6"
+            />
+          </svg>
+        </button>
+        <ul
+          v-if="themeOpen"
+          class="hdr__theme-list"
+          role="listbox"
+          aria-label="Theme"
+        >
+          <li
+            v-for="th in themeStore.available"
+            :key="th"
+            class="hdr__theme-item"
+            :class="[
+              `hdr__theme-item--${th}`,
+              { 'hdr__theme-item--active': th === themeStore.current },
+            ]"
+            role="option"
+            :aria-selected="th === themeStore.current"
+            :data-tooltip="t.themeOption(th)"
+            :aria-label="t.themeOption(th)"
+            @click="pickTheme(th)"
+          >
+            <span class="hdr__theme-item-dot" />
+            {{ THEME_LABELS[th] }}
+          </li>
+        </ul>
+      </div>
+
       <button
         type="button"
-        class="hdr__theme"
-        :title="`Theme: ${THEME_LABELS[themeStore.current]} · click to cycle`"
-        @click="themeStore.cycle()"
+        class="hdr__download"
+        :data-tooltip="t.download"
+        :aria-label="t.download"
+        @click="downloadCV"
       >
-        <span class="hdr__theme-dot" />
-        {{ THEME_LABELS[themeStore.current] }}
-      </button>
-
-      <button type="button" class="hdr__download" @click="downloadCV">
         <svg
           class="hdr__download-icon"
           viewBox="0 0 24 24"
@@ -224,23 +334,46 @@ function downloadCV(): void {
   }
 }
 
+// Theme picker — custom dropdown so we can render a coloured "preview dot"
+// next to each theme name (native <option> elements can't hold styled
+// children consistently across browsers).
 .hdr__theme {
+  position: relative;
+  display: inline-block;
+}
+
+.hdr__theme-toggle {
   display: inline-flex;
   align-items: center;
   gap: $space-2;
-  padding: $space-2 $space-4;
+  padding: $space-2 $space-3 $space-2 $space-4;
   background: var(--color-panel);
   border: 1px solid var(--color-border);
   border-radius: $radius-md;
   font-family: $font-mono;
   font-size: $fs-sm;
   color: var(--color-text);
-  transition: all $transition-fast;
+  transition: border-color $transition-fast, color $transition-fast;
   cursor: pointer;
 
-  &:hover {
+  &:hover,
+  .hdr__theme--open & {
     border-color: var(--color-accent);
     color: var(--color-accent);
+  }
+}
+
+.hdr__theme-caret {
+  flex-shrink: 0;
+  color: var(--color-muted);
+  transition: color $transition-fast, transform $transition-fast;
+
+  .hdr__theme-toggle:hover &,
+  .hdr__theme--open & {
+    color: var(--color-accent);
+  }
+  .hdr__theme--open & {
+    transform: rotate(180deg);
   }
 }
 
@@ -251,6 +384,59 @@ function downloadCV(): void {
   background: var(--color-accent);
   box-shadow: var(--glow-accent);
   flex-shrink: 0;
+}
+
+.hdr__theme-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 100%;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: $radius-md;
+  box-shadow: var(--shadow-panel);
+  z-index: $z-overlay;
+}
+
+.hdr__theme-item {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-2 $space-3;
+  font-family: $font-mono;
+  font-size: $fs-sm;
+  color: var(--color-text);
+  border-radius: $radius-sm;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background $transition-fast, color $transition-fast;
+
+  &:hover {
+    background: var(--color-panel-2);
+    color: var(--color-accent);
+  }
+
+  &--active {
+    color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-panel-2) 80%, transparent);
+  }
+}
+
+.hdr__theme-item-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: $radius-full;
+  flex-shrink: 0;
+
+  // Each theme's preview dot uses that theme's accent — hardcoded because
+  // the page is currently rendered with a single theme's CSS vars active.
+  .hdr__theme-item--dark   & { background: #38bdf8; }
+  .hdr__theme-item--light  & { background: #0284c7; }
+  .hdr__theme-item--cyber  & { background: #00ffaa; }
+  .hdr__theme-item--indigo & { background: #e6a647; }
 }
 
 .hdr__download {
