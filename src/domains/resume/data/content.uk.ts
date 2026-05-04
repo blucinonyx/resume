@@ -7,7 +7,7 @@ export const CONTENT_UK: PeriodContentMap = Object.freeze({
     location: 'Київ (remote-friendly)',
     url: 'https://keyapp.top',
     context:
-      'ASO SaaS — keyword installs, рейтинги і аналітика для Google Play та Apple App Store; 43 000+ клієнтів у 30+ нішах і покриття 200+ регіонів. Веду інженерію по двох продуктах портфоліо Keyapp.',
+      'ASO SaaS — keyword installs, рейтинги і аналітика для Google Play та Apple App Store; 120 000+ клієнтів у 30+ нішах і покриття 200+ регіонів. Веду інженерію по двох продуктах портфоліо Keyapp.',
     bullets: [
       'Tech Lead і Team Lead. Збудував інженерну команду з нуля до сталих п’яти (1 FE, 1 BE, 1 QA + я; поряд з CTO). Веду code review, hiring loops, онбординг.',
       'Спроєктував архітектуру нової платформи і вів міграцію зі старої версії.',
@@ -24,12 +24,12 @@ export const CONTENT_UK: PeriodContentMap = Object.freeze({
       { key: 'команда зросла', value: '0 → 5 (lead)' },
       { key: 'продуктів веду', value: '2' },
       { key: 'FE-домени', value: '32 (30+ мігровано)' },
-      { key: 'клієнтів', value: '43К+' },
+      { key: 'клієнтів', value: '120К+' },
     ],
     highlightMetrics: ['добовий трафік', 'команда зросла', 'подій/добу'] as const,
     pinnedDescription:
       'Масштабував ClickHouse <b>1М → 124М рядків/добу</b> на Laravel + RabbitMQ. ' +
-      'Зібрав інженерну команду <b>0 → 5</b>. App-store SaaS · <b>43K+ клієнтів</b>.',
+      'Зібрав інженерну команду <b>0 → 5</b>. App-store SaaS · <b>120K+ клієнтів</b>.',
     stack: [
       'Laravel 9',
       'Vue 3',
@@ -57,6 +57,7 @@ export const CONTENT_UK: PeriodContentMap = Object.freeze({
     context: 'Кредитний / wallet fintech (споживчі кредити).',
     bullets: [
       'Прийшов будувати новий продукт на Laravel + Vue.js + MySQL + Webpack.',
+      'Через кілька тижнів після старту почалося повномасштабне вторгнення. Переїзд за кордон і легалізація не дали змоги нормально працювати — довелося завершити контракт раніше.',
     ],
     metrics: [{ key: 'тривалість', value: '4 місяці' }],
     stack: ['Laravel', 'Vue.js', 'MySQL', 'Webpack', 'PHP 8'],
@@ -67,19 +68,20 @@ export const CONTENT_UK: PeriodContentMap = Object.freeze({
     title: 'XPAY GROUP',
     subtitle: 'Full-Stack PHP / Yii2 Developer',
     location: 'Київ',
-    url: null,
+    url: 'https://www.xpay.com.ua',
     context:
-      'Платіжна платформа; acquirer працював з одним із найбільших банків України.',
+      'Український PSP — internet-еквайринг, електронні гроші, емісія карт і перекази. PCI DSS Level 1, 3D Secure, Visa та Mastercard. Мерчанти у готелях, MFO, страхуванні, туроператорів, утилітах та рітейлі (Yakaboo, SportLife, Otpusk, Smart Planet тощо).',
     bullets: [
       'Будував і підтримував код інтеграції платежів переважно на Yii2 (~90% роботи), з PostgreSQL + MySQL + jQuery; Laravel становив близько 10% кодбази.',
+      'Працював над acquiring-флоу: charge → auth → 3DS → банк → settlement, плюс merchant-кабінет.',
       'Прийшов з надією на Laravel-роботу; закрив фактично всі призначені тікети на Yii2 і пішов щоб працювати тільки з Laravel.',
     ],
     metrics: [
       { key: 'тривалість', value: '9 місяців' },
-      { key: 'частка Yii2', value: '~90%' },
-      { key: 'частка Laravel', value: '~10%' },
+      { key: 'compliance', value: 'PCI DSS L1 · 3DS' },
+      { key: 'мережі карт', value: 'Visa · Mastercard' },
     ],
-    stack: ['Yii2', 'Laravel', 'PHP', 'PostgreSQL', 'MySQL', 'jQuery'],
+    stack: ['Yii2', 'Laravel', 'PHP', 'PostgreSQL', 'MySQL', 'jQuery', '3DS', 'PCI DSS'],
     quote: null,
   },
 
@@ -87,9 +89,9 @@ export const CONTENT_UK: PeriodContentMap = Object.freeze({
     title: 'ClickDealer',
     subtitle: 'Mid PHP Developer',
     location: 'Дніпро',
-    url: null,
-    context: 'Короткий контракт — внутрішній портал.',
-    bullets: ['Працював над фічами внутрішнього порталу на Silex.'],
+    url: 'https://www.clickdealer.com',
+    context: 'CPA / performance-marketing мережа. Короткий контракт на внутрішньому порталі (Silex / PHP).',
+    bullets: ['Закрив призначені тікети на внутрішньому порталі.'],
     metrics: [{ key: 'тривалість', value: '2 місяці' }],
     stack: ['Silex', 'PHP', 'MySQL'],
     quote: null,
@@ -105,7 +107,7 @@ export const CONTENT_UK: PeriodContentMap = Object.freeze({
       'Розгортав нову версію платформи разом з колегою — більша частина архітектури і модулів моя.',
       'Перепроєктував workflow бізнес-процесів компанії на корпоративному порталі Bitrix.',
       'Підтримував і розвивав інтернет-магазин online-apteka.com.ua.',
-      'Зробив з нуля сайт-візитку apteka-med-service.ru (PHP + CSS + HTML + JS).',
+      'Зробив сайт-візитку apteka-med-service.ru на WordPress — тема написана з нуля + власні плагіни. Здобув 100 / 100 і на Mobile, і на Desktop у PageSpeed Insights за алгоритмами того часу.',
       'Спроєктував проект автоматизації внутрішніх бізнес-процесів; обрано найкращим за загальнокорпоративним голосуванням, нагороджений дипломом компанії.',
       'Оптимізував MySQL-запити і додав кешування щоб портал лишався чуйним при навантаженні.',
     ],
@@ -114,7 +116,7 @@ export const CONTENT_UK: PeriodContentMap = Object.freeze({
       { key: 'сайтів запущено', value: '2 + корп. портал' },
       { key: 'визнання', value: 'диплом за best project' },
     ],
-    stack: ['Bitrix', 'PHP', 'MySQL', 'HTML', 'CSS', 'JavaScript'],
+    stack: ['Bitrix', 'WordPress', 'PHP', 'MySQL', 'HTML', 'CSS', 'JavaScript'],
     quote: null,
   },
 
@@ -146,7 +148,7 @@ export const CONTENT_UK: PeriodContentMap = Object.freeze({
       { key: 'тривалість', value: '3 місяці' },
       { key: 'сайтів', value: '~10' },
     ],
-    stack: ['PHP', 'JavaScript', 'HTML/CSS', 'WordPress', 'Custom CMS'],
+    stack: ['PHP', 'JavaScript', 'HTML', 'SQL', 'WordPress'],
     quote: null,
   },
 

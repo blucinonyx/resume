@@ -55,7 +55,7 @@ const bars = computed(() => {
 </script>
 
 <template>
-  <div class="pipe">
+  <div class="pipe" :class="{ 'pipe--paused': !store.isRunning }">
     <header class="pipe__head">
       <span class="pipe__live">{{ t.title }}</span>
     </header>
@@ -79,14 +79,26 @@ const bars = computed(() => {
     </div>
 
     <div class="pipe__controls">
-      <button class="pipe__btn pipe__btn--primary" type="button" @click="store.start()">
+      <button
+        type="button"
+        class="pipe__btn pipe__btn--primary"
+        :disabled="store.isRunning"
+        @click="store.start()"
+      >
         {{ t.start }}
       </button>
-      <button class="pipe__btn" type="button" @click="store.pause()">{{ t.pause }}</button>
+      <button
+        type="button"
+        class="pipe__btn"
+        :disabled="!store.isRunning"
+        @click="store.pause()"
+      >
+        {{ t.pause }}
+      </button>
       <button class="pipe__btn" type="button" @click="store.reset()">{{ t.reset }}</button>
     </div>
 
-    <div class="pipe__flow">
+    <div class="pipe__flow" :class="{ 'pipe__flow--paused': !store.isRunning }">
       <div class="pipe__node pipe__node--in">{{ t.sourceN }}</div>
       <div class="pipe__line">
         <span class="pipe__dot pipe__dot--a" />
@@ -208,11 +220,17 @@ const bars = computed(() => {
   border-radius: $radius-md;
   font-family: $font-mono;
   font-size: $fs-xs;
+  cursor: pointer;
   transition: all $transition-fast;
 
-  &:hover {
+  &:hover:not(:disabled) {
     border-color: var(--color-accent);
     color: var(--color-accent);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
   }
 
   &--primary {
@@ -220,7 +238,7 @@ const bars = computed(() => {
     color: var(--color-bg);
     border-color: var(--color-accent);
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: var(--color-accent-hover);
       border-color: var(--color-accent-hover);
       color: var(--color-bg);
@@ -292,6 +310,23 @@ const bars = computed(() => {
     animation-delay: 1s;
     background: var(--color-warning);
     box-shadow: var(--glow-warning);
+  }
+
+  .pipe__flow--paused & {
+    animation-play-state: paused;
+    opacity: 0.25;
+  }
+}
+
+.pipe--paused {
+  .pipe__live {
+    color: var(--color-muted);
+
+    &::before {
+      animation-play-state: paused;
+      background: var(--color-muted);
+      box-shadow: none;
+    }
   }
 }
 

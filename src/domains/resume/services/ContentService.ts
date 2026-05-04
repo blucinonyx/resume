@@ -42,9 +42,8 @@ export class ContentService {
   }
 
   static shortRange(meta: PeriodMeta): string {
-    const start = String(meta.startYear).slice(2);
-    if (meta.endYear === null) return `${start} → now`;
-    const end = String(meta.endYear).slice(2);
-    return start === end ? `’${start}` : `’${start} – ’${end}`;
+    if (meta.endYear === null) return `${meta.startYear} → now`;
+    if (meta.startYear === meta.endYear) return String(meta.startYear);
+    return `${meta.startYear}—${meta.endYear}`;
   }
 }
