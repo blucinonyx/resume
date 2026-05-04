@@ -1,9 +1,10 @@
 # ─── IDE / Editor ──────────────────────────────────────────────────────
 .idea/
 .vscode/
-.github/
 .fleet/
 .cursor/
+# .github/ is checked in — workflows live there. Add per-file ignores
+# below if some .github/* file is genuinely private.
 *.swp
 *.swo
 *~
